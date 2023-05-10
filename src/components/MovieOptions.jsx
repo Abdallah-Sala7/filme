@@ -17,14 +17,6 @@ const MovieOptions = () => {
     setOption({ ...option, rating: !option.rating });
   };
 
-  useEffect(() => {
-    if (option.rating) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-  }, [option.rating]);
-
   return (
     <div className="relative w-full flex items-center gap-2 mb-5 flex-wrap">
       <a
