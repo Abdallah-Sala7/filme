@@ -16,31 +16,16 @@ export const movieApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl, headers }),
   tagTypes: ["Movie"],
   endpoints: (builder) => ({
-    getPopularMovie: builder.query({
-      query: (page) => `/${listId}?page=${page}&api_key=${api_key}&sort_by=popularity.desc`,
-      providesTags: ["Movie"],
-    }),
-
-    getTopRatedMovie: builder.query({
-      query: (page) => `/${listId}?page=${page}&api_key=${api_key}`,
-      providesTags: ["Movie"],
-    }),
-
-    getOldMovie: builder.query({
-      query: (page) => `/${listId}?page=${page}&api_key=${api_key}/&sort_by=release_date.asc`,
-      providesTags: ["Movie"],
-    }),
-
-    getNewMovie: builder.query({
-      query: (page) => `/${listId}?page=${page}&api_key=${api_key}/&sort_by=release_date.desc`,
+    getAllMovie: builder.query({
+      query: (arge) =>
+        `/${listId}?page=${arge.page}&api_key=${api_key}/&sort_by=${
+          arge.sortBy
+        }&${arge.genre === "all" ? "" : `with_genres=${arge.genre}`}`,
       providesTags: ["Movie"],
     }),
   }),
 });
 
 export const {
-  useGetPopularMovieQuery,
-  useGetNewMovieQuery,
-  useGetOldMovieQuery,
-  useGetTopRatedMovieQuery,
+  useGetAllMovieQuery,
 } = movieApi;

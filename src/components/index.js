@@ -6,3 +6,7 @@ export {default as MoviesFilter} from './MoviesFilter'
 
 export {default as MovieOptions} from './MovieOptions'
 export {default as LoadingCard} from './LoadingCard'
+export {default as LoadingMoviePage} from './LoadingMoviePage'
+export {default as SelectOptions} from './SelectOptions'
+export {default as SwiperNav} from './SwiperNav'
+export {default as HeaderCard} from './HeaderCard'

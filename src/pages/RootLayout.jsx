@@ -11,9 +11,9 @@ const RootLayout = () => {
 
   useEffect(() => {
     if (openAside) {
-      document.body.classList.add("overflow-hidden");
+      document.body.classList.add("stop-scrolling");
     } else {
-      document.body.classList.remove("overflow-hidden");
+      document.body.classList.remove("stop-scrolling");
     }
   }, [openAside]);
 

@@ -1,105 +1,78 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { LoadingCard, MovieCard, MoviesFilter } from "../components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
+import { useGetAllMovieQuery } from "../app/server/movieApi";
 import {
-  useGetNewMovieQuery,
-  useGetOldMovieQuery,
-  useGetPopularMovieQuery,
-  useGetTopRatedMovieQuery,
-} from "../app/server/movieApi";
+  decrementPage,
+  incrementPage,
+  resetePage,
+} from "../app/reducer/filterSlice";
 
 const Movies = () => {
-  const [moviePage, setMoviePage] = useState(1);
-  const [movieList, setMovieList] = useState([]);
-  const { sortBy } = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
-  const { data: popularMovie, isSuccess: popularSuccess, isLoading : popularLoading } =
-    useGetPopularMovieQuery(moviePage);
-
-  const { data: topRateMovie, isSuccess: topRateSuccess, isLoading : topRateLoading } =
-    useGetTopRatedMovieQuery(moviePage);
-
-  const { data: oldMovie, isSuccess: oldSuccess, isLoading : oldLoading } =
-    useGetOldMovieQuery(moviePage);
-
-  const { data: newMovie, isSuccess: newSuccess, isLoading : newLoading  } =
-    useGetNewMovieQuery(moviePage);
+  const { sortBy, genre, page } = useSelector((state) => state.filter);
+  const { data, isSuccess, error } = useGetAllMovieQuery({
+    page,
+    genre: genre.id,
+    sortBy
+  });
 
   useEffect(() => {
-    if (sortBy === "rating" && topRateSuccess) {
-      setMovieList(topRateMovie.results);
-    } else if (sortBy === "popular" && popularSuccess) {
-      setMovieList(popularMovie.results);
-    } else if (sortBy === "oldest" && oldSuccess) {
-      setMovieList(oldMovie.results);
-    } else if (sortBy === "all" && newSuccess) {
-      setMovieList(newMovie.results);
-    }
-  }, [sortBy, popularSuccess, topRateSuccess, oldSuccess, newSuccess]);
+    window.scrollTo(0, 0);
+  }, [page]);
 
   useEffect(() => {
-    if (sortBy === "rating" && topRateSuccess) {
-      const removeDuplicate = topRateMovie.results.filter(
-        (movie) => !movieList.find((item) => item.id === movie.id)
-      );
-      setMovieList([...movieList, ...removeDuplicate]);
-    } else if (sortBy === "popular" && popularSuccess) {
-      const removeDuplicate = popularMovie.results.filter(
-        (movie) => !movieList.find((item) => item.id === movie.id)
-      );
-      setMovieList([...movieList, ...removeDuplicate]);      
-    } else if (sortBy === "oldest" && oldSuccess) {
-      const removeDuplicate = oldMovie.results.filter(
-        (movie) => !movieList.find((item) => item.id === movie.id)
-      );
-      setMovieList([...movieList, ...removeDuplicate]);
-    } else if (sortBy === "all" && newSuccess) {
-      const removeDuplicate = newMovie.results.filter(
-        (movie) => !movieList.find((item) => item.id === movie.id)
-      );
-      setMovieList([...movieList, ...removeDuplicate]);
-    }
-  }, [
-    moviePage,
-    popularSuccess,
-    topRateSuccess,
-    oldSuccess,
-    newSuccess
-  ]);
+    dispatch(resetePage());
+  }, [sortBy, genre]);
 
   return (
     <>
       <MoviesFilter />
+      {isSuccess ? (
+        <>
+          <section className="grid grid-cols-2 gap-4 py-5 sm:grid-cols-4 md:grid-cols-5 md:gap-5 xl:grid-cols-6">
+            {data?.results?.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </section>
 
-      <section className="grid grid-cols-2 gap-4 py-5 sm:grid-cols-4 md:grid-cols-5 md:gap-5 xl:grid-cols-6">
-        {newSuccess || popularSuccess || topRateSuccess || oldSuccess ? (
-          movieList.map((movie) => <MovieCard key={movie.id} movie={movie} />)
-        ) : (
-          <>
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-            <LoadingCard />
-          </>
-        )}
-      </section>
+          <div className="flex justify-center items-center gap-3 mb-4">
+            <button
+              className="bg-yellow text-black capitalize font-semibold px-5 py-2 rounded-md"
+              onClick={() => dispatch(decrementPage())}
+              disabled={page === 1}
+            >
+              prev
+            </button>
 
-      <div className="flex justify-center">
-        <button
-          className="bg-yellow text-black font-semibold px-5 py-2 rounded-md active:bg-red-800"
-          onClick={() => setMoviePage(moviePage + 1)}
-        >
-          {
-            (popularLoading || topRateLoading || oldLoading || newLoading)? "Loading..." : "Load More"
-          }
-        </button>
-      </div>
+            <p className="text-light font-semibold">
+              {data?.page} / {data?.total_pages}
+            </p>
+
+            <button
+              className="bg-yellow text-black capitalize font-semibold px-5 py-2 rounded-md"
+              onClick={() => dispatch(incrementPage())}
+              disabled={data?.page === data?.total_pages}
+            >
+              next
+            </button>
+          </div>
+        </>
+      ) : (
+        <section className="grid grid-cols-2 gap-4 py-5 sm:grid-cols-4 md:grid-cols-5 md:gap-5 xl:grid-cols-6">
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+          <LoadingCard />
+        </section>
+      )}
     </>
   );
 };

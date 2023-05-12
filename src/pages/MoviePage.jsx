@@ -2,147 +2,165 @@ import React from "react";
 import { heartIcon, poster, shareIcon, starIcon } from "../assets";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper";
+import { Pagination, Autoplay, FreeMode, } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
-import { LoadingCard, MovieCard, MovieOptions } from "../components";
-import { useGetPopularMovieQuery } from "../app/server/movieApi";
+import "swiper/css/free-mode";
+
+import {
+  LoadingCard,
+  LoadingMoviePage,
+  MovieCard,
+  MovieOptions,
+  SwiperNav,
+} from "../components";
+import { useGetAllMovieQuery } from "../app/server/movieApi";
 import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
 import { useParams } from "react-router-dom";
 
 const MoviePage = () => {
-  const param = useParams().movieId;
+  const param = useParams();
 
-  const { data, isLoading } = useGetPopularMovieQuery();
+  const { data: forYouData, isSuccess: forYouSuccess } = useGetAllMovieQuery({
+    page: 1,
+    genre: "all",
+    sortBy: "popularity.desc",
+  });
 
-  const { data: movieData, isLoading: movieLoading } =
-    useGetMovieDetailsQuery(param);
+  const { data: movieData, isSuccess: movieSuccess } =
+    useGetMovieDetailsQuery(param.movieId);
 
-  if(movieLoading) <div>loading... </div>
+  console.log(movieData);
+
   return (
     <>
-      <header className="relative z-10 flex  items-end w-full aspect-video max-h-96 rounded-lg overflow-hidden">
-        <div className="absolute inset-0 -z-10 w-full h-full">
-          <img
-            src={
-              movieData?.backdrop_path
-                ? `https://image.tmdb.org/t/p/original/${movieData?.backdrop_path}`
-                : poster
-            }
-            alt="poster img"
-            className="w-full h-full object-cover bg-fixed brightness-50"
-          />
-        </div>
+      {movieSuccess ? (
+        <>
+          <header
+            className={`relative z-10 flex items-end w-full aspect-video h-64 max-h-96 rounded-lg overflow-hidden bg-fixed bg-cover bg-top bg-no-repeat sm:h-auto`}
+            style={{
+              backgroundImage: `url(https://image.tmdb.org/t/p/original/${
+                movieData?.backdrop_path
+                  ? `https://image.tmdb.org/t/p/original/${movieData?.backdrop_path}`
+                  : poster
+              }`,
+            }}
+          >
+            <div className="absolute inset-0 -z-10 w-full h-full gradient-filter"></div>
 
-        <div className="w-full px-4 py-2 sm:py-4 sm:px-8">
-          <div className="flex justify-between items-center mb-3 sm:mb-5">
-            <h1 className="text-white text-lg font-bold uppercase sm:text-3xl">
-              {movieData?.title}
-            </h1>
+            <div className="w-full px-4 py-2 sm:py-4 sm:px-8">
+              <div className="flex justify-between items-end mb-1 sm:mb-5">
+                <h1 className="text-white text-lg font-bold uppercase sm:text-3xl">
+                  {movieData?.title}
+                </h1>
 
-            <div className="flex items-center gap-2">
-              <a
-                href="#"
-                className="opacity-70 w-9 h-9 flex items-center justify-center rounded-full border border-white hover:bg-grayHover hover:opacity-100 sm:w-12 sm:h-12"
-              >
-                <img
-                  src={heartIcon}
-                  alt="heart icon"
-                  className="w-4 h-4 object-contain invert sm:w-5 sm:h-5"
-                />
-              </a>
+                <div className="absolute top-2 left-0 w-full px-4 flex items-center justify-between gap-2 sm:static sm:w-auto sm:justify-center sm:px-0">
+                  <a
+                    href="#"
+                    className="opacity-70 w-9 h-9 flex items-center justify-center rounded-full border border-white hover:bg-grayHover hover:opacity-100 sm:w-12 sm:h-12"
+                  >
+                    <img
+                      src={heartIcon}
+                      alt="heart icon"
+                      className="w-4 h-4 object-contain invert sm:w-5 sm:h-5"
+                    />
+                  </a>
 
-              <a
-                href="#"
-                className="opacity-70 h-9 px-3 flex items-center justify-center gap-2 rounded-full border border-white hover:bg-grayHover hover:opacity-100 sm:h-12 sm:px-5"
-              >
-                <img
-                  src={shareIcon}
-                  alt="heart icon"
-                  className="w-4 h-4 object-contain invert sm:w-5 sm:h-5"
-                />
+                  <a
+                    href="#"
+                    className="opacity-70 h-9 px-3 flex items-center justify-center gap-2 rounded-full border border-white hover:bg-grayHover hover:opacity-100 sm:h-12 sm:px-5"
+                  >
+                    <img
+                      src={shareIcon}
+                      alt="heart icon"
+                      className="w-4 h-4 object-contain invert sm:w-5 sm:h-5"
+                    />
 
-                <span className="text-white font-normal uppercase text-sm sm:text-xl">
-                  share
-                </span>
-              </a>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <div className="flex items-center text-grayDark text-xs font-bold gap-3 sm:text-sm">
-              {movieData?.genres.map((genre, idx) => (
-                <span
-                  key={idx}
-                  className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark first-of-type:after:w-0"
-                >
-                  {genre.name}
-                </span>
-              ))}
-
-              <span className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark first-of-type:after:w-0">
-                {movieData.popularity}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1 sm:gap-2">
-              <p className="text-grayDark font-bold text-sm sm:text-base">
-                4.5<span className="text-xs sm:text-sm">/5</span>
-              </p>
-
-              <div className="flex items-center sm:gap-0.5">
-                <img
-                  src={starIcon}
-                  alt="star icon"
-                  className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                />
-                <img
-                  src={starIcon}
-                  alt="star icon"
-                  className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                />
-                <img
-                  src={starIcon}
-                  alt="star icon"
-                  className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                />
-                <img
-                  src={starIcon}
-                  alt="star icon"
-                  className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                />
-                <img
-                  src={starIcon}
-                  alt="star icon"
-                  className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                />
+                    <span className="text-white font-normal uppercase text-sm sm:text-xl">
+                      share
+                    </span>
+                  </a>
+                </div>
               </div>
 
-              <p className="hidden text-grayDark font-bold sm:block">
-                8.5<span className="text-xs sm:text-sm">/10</span>
-              </p>
+              <div className="flex flex-col gap-2 sm:justify-between sm:items-center sm:flex-row">
+                <div className="flex items-center text-grayDark text-xs font-bold gap-3 sm:text-sm line-clamp-1">
+                  {movieData?.genres.map((genre, idx) => (
+                    <span
+                      key={idx}
+                      className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark first-of-type:after:w-0"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
 
-              <div className="hidden px-1 rounded bg-yellow sm:block">
-                <span className="text-dark font-bold text-sm">IMDb</span>
+                  <span className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark">
+                    {movieData.release_date?.split("-")[0]}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <p className="text-grayDark font-bold text-sm sm:text-base">
+                    4.5<span className="text-xs sm:text-sm">/5</span>
+                  </p>
+
+                  <div className="flex items-center sm:gap-0.5">
+                    <img
+                      src={starIcon}
+                      alt="star icon"
+                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
+                    />
+                    <img
+                      src={starIcon}
+                      alt="star icon"
+                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
+                    />
+                    <img
+                      src={starIcon}
+                      alt="star icon"
+                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
+                    />
+                    <img
+                      src={starIcon}
+                      alt="star icon"
+                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
+                    />
+                    <img
+                      src={starIcon}
+                      alt="star icon"
+                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
+                    />
+                  </div>
+
+                  <p className="text-grayDark font-bold">
+                    8.5<span className="text-xs sm:text-sm">/10</span>
+                  </p>
+
+                  <div className="px-1 rounded bg-yellow">
+                    <span className="text-dark font-bold text-sm">IMDb</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      <section className="py-5">
-        <MovieOptions />
+          <section className="py-5">
+            <MovieOptions />
 
-        <div>
-          <h1 className="capitalize text-light font-semibold text-xl mb-2">
-            overview
-          </h1>
+            <div>
+              <h1 className="capitalize text-light font-semibold text-xl mb-2">
+                overview
+              </h1>
 
-          <p className="text-sm text-grayDark font-semibold sm:text-base">
-            {movieData?.overview}
-          </p>
-        </div>
-      </section>
+              <p className="text-sm text-grayDark font-semibold sm:text-base">
+                {movieData?.overview}
+              </p>
+            </div>
+          </section>
+        </>
+      ) : (
+        <LoadingMoviePage />
+      )}
 
       <section>
         <h1 className="text-yellow font-semibold text-xl capitalize">
@@ -152,6 +170,7 @@ const MoviePage = () => {
         <Swiper
           spaceBetween={10}
           slidesPerView={2.5}
+          freeMode={true}
           breakpoints={{
             576: {
               slidesPerView: 3.2,
@@ -167,10 +186,10 @@ const MoviePage = () => {
               slidesPerView: 6.25,
             },
           }}
-          modules={[Autoplay, Pagination]}
+          modules={[Autoplay, Pagination,FreeMode]}
           className="!py-5"
         >
-          {isLoading ? (
+          {!forYouSuccess ? (
             <>
               <SwiperSlide>
                 <LoadingCard />
@@ -201,12 +220,13 @@ const MoviePage = () => {
               </SwiperSlide>
             </>
           ) : (
-            data.results.map((item, index) => (
+            forYouData.results.map((item, index) => (
               <SwiperSlide key={index}>
                 <MovieCard movie={item} />
               </SwiperSlide>
             ))
           )}
+          <SwiperNav />
         </Swiper>
       </section>
     </>

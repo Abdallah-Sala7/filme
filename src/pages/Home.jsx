@@ -1,19 +1,21 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper";
+import { Pagination, Autoplay, FreeMode } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/free-mode";
 
-import { gridIcon, poster, starIcon } from "../assets";
-import { LoadingCard, MovieCard } from "../components";
+import { gridIcon, playIcon, poster, poster2, starIcon } from "../assets";
+import { HeaderCard, LoadingCard, MovieCard, SwiperNav } from "../components";
 
-import {
-  useGetPopularMovieQuery,
-  useGetTopRatedMovieQuery,
-} from "../app/server/movieApi";
+import { useGetAllMovieQuery } from "../app/server/movieApi";
 
 const Home = () => {
-  const { data: popularMovie, isLoading : popularLoading } = useGetPopularMovieQuery();
-  const { data: topRateMovie, isLoading :topRateLoading } = useGetTopRatedMovieQuery();
+  const { data: popularMovie, isSuccess: popularSuccess } = useGetAllMovieQuery(
+    { page: 1, genre: "all", sortBy: "popularity.desc" }
+  );
+  const { data: topRateMovie, isSuccess: topRateSuccess } = useGetAllMovieQuery(
+    { page: 1, genre: "all", sortBy: "vote_average.desc" }
+  );
 
   return (
     <>
@@ -32,69 +34,10 @@ const Home = () => {
           modules={[Autoplay, Pagination]}
         >
           <SwiperSlide>
-            <div className="relative z-10 p-8 flex flex-col justify-end rounded-lg overflow-hidden w-full aspect-video">
-              <a href="#" className="absolute inset-0 flex -z-10">
-                <img
-                  src={poster}
-                  alt=""
-                  className="w-full h-full object-cover filter brightness-50"
-                />
-              </a>
-
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="font-semibold text-lg text-white capitalize">
-                  The Final Season{" "}
-                </h1>
-
-                <div className="flex items-center gap-1 py-0.5 px-1 bg-yellow rounded-md">
-                  <img
-                    src={starIcon}
-                    alt="star icon"
-                    className="w-4 h-4 object-contain invert"
-                  />
-                  <span className="font-semibold text-white">8.3/10</span>
-                </div>
-              </div>
-
-              <p className="hidden text-white text-sm leading-6 md:pr-16 lg:pr-40 md:block">
-                The survivors of a plane crash find themselves stranded on a
-                mysterious island. They are forced to work together for their
-                survival when they realise that they...
-              </p>
-            </div>
+            <HeaderCard poster={poster} title={"The Final Season"} rate={9.2} />
           </SwiperSlide>
-
           <SwiperSlide>
-            <div className="relative z-10 p-8 flex flex-col justify-end rounded-lg overflow-hidden w-full aspect-video">
-              <a href="#" className="absolute inset-0 flex -z-10">
-                <img
-                  src={poster}
-                  alt=""
-                  className="w-full h-full object-cover filter brightness-50"
-                />
-              </a>
-
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="font-semibold text-lg text-white capitalize">
-                  The Final Season{" "}
-                </h1>
-
-                <div className="flex items-center gap-1 py-0.5 px-1 bg-yellow rounded-md">
-                  <img
-                    src={starIcon}
-                    alt="star icon"
-                    className="w-4 h-4 object-contain invert"
-                  />
-                  <span className="font-semibold text-white">8.3/10</span>
-                </div>
-              </div>
-
-              <p className="hidden text-white text-sm leading-6 md:pr-16 lg:pr-40 md:block">
-                The survivors of a plane crash find themselves stranded on a
-                mysterious island. They are forced to work together for their
-                survival when they realise that they...
-              </p>
-            </div>
+            <HeaderCard poster={poster2} title={"Breaking bad"} rate={8.5} />
           </SwiperSlide>
         </Swiper>
       </header>
@@ -179,6 +122,7 @@ const Home = () => {
         <Swiper
           spaceBetween={10}
           slidesPerView={2.5}
+          freeMode={true}
           breakpoints={{
             576: {
               slidesPerView: 3.2,
@@ -194,10 +138,10 @@ const Home = () => {
               slidesPerView: 6.25,
             },
           }}
-          modules={[Autoplay, Pagination]}
+          modules={[Autoplay, Pagination, FreeMode]}
           className="!py-5"
         >
-          {topRateLoading ? (
+          {!topRateSuccess ? (
             <>
               <SwiperSlide>
                 <LoadingCard />
@@ -231,10 +175,10 @@ const Home = () => {
             topRateMovie.results.map((item, index) => (
               <SwiperSlide key={index}>
                 <MovieCard movie={item} />
-                {console.log(item)}
               </SwiperSlide>
             ))
           )}
+          <SwiperNav />
         </Swiper>
       </section>
 
@@ -254,6 +198,7 @@ const Home = () => {
         <Swiper
           spaceBetween={10}
           slidesPerView={2.5}
+          freeMode={true}
           breakpoints={{
             576: {
               slidesPerView: 3.2,
@@ -269,10 +214,10 @@ const Home = () => {
               slidesPerView: 6.25,
             },
           }}
-          modules={[Autoplay, Pagination]}
+          modules={[Autoplay, Pagination, FreeMode]}
           className="!py-5"
         >
-          {popularLoading ? (
+          {!popularSuccess ? (
             <>
               <SwiperSlide>
                 <LoadingCard />
@@ -306,10 +251,10 @@ const Home = () => {
             popularMovie.results.map((item, index) => (
               <SwiperSlide key={index}>
                 <MovieCard movie={item} />
-                {console.log(item)}
               </SwiperSlide>
             ))
           )}
+          <SwiperNav />
         </Swiper>
       </section>
     </>

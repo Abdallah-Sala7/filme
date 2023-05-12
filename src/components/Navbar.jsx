@@ -3,10 +3,17 @@ import { closeIcon, logo, menuIcon, searchIcon, userIcon } from "../assets";
 import SearchBar from "./SearchBar";
 import { useDispatch } from "react-redux";
 import { setOpenAside } from "../app/reducer/appSlice";
+import { useLocation } from "react-router-dom";
+import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
 
 const Navbar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const { data, isSuccess } = useGetMovieDetailsQuery(
+    location.pathname.split("/")[2]
+  );
 
   const handleShowSearchBar = (e) => {
     e.preventDefault();
@@ -19,8 +26,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
-      <div className="px-2 flex justify-between items-center gap-3 py-5 md:px-4">
+    <nav className="px-2 py-5 md:px-4">
+      <div className="flex justify-between items-center gap-3 mb-3 lg:mb-0">
         <div
           className={`flex gap-3 items-center ${
             showSearchBar ? "hidden" : "block"
@@ -46,8 +53,12 @@ const Navbar = () => {
             />
           </a>
 
-          <h1 className="hidden p-2 text-white capitalize text-xl font-semibold lg:block">
-            home
+          <h1 className="hidden text-white capitalize text-xl font-semibold lg:block">
+            {location.pathname === "/"
+              ? "home"
+              : !isNaN(location.pathname.split("/")[2])
+              ? (isSuccess && data?.title) || "loading..."
+              : location.pathname.split("/")[1]}
           </h1>
         </div>
 
@@ -98,6 +109,14 @@ const Navbar = () => {
           </a>
         </div>
       </div>
+
+      <h2 className="text-white capitalize text-base font-semibold lg:hidden">
+        {location.pathname === "/"
+          ? "home"
+          : !isNaN(location.pathname.split("/")[2])
+          ? (isSuccess && data?.title) || "loading..."
+          : location.pathname.split("/")[1]}
+      </h2>
     </nav>
   );
 };

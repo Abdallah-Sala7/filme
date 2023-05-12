@@ -11,17 +11,17 @@ const MovieCard = ({ movie }) => {
       className={`flex flex-col rounded-md overflow-hidden bg-grayLighter transition-all hover:scale-105`}
       aria-labelledby="modal-headline"
     >
-      <div className="grow">
+      <div className="flex h-48 sm:h-56  md:h-60 lg:h-56">
       {validSrc ? (
         <img
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={movie.title}
           loading="lazy"
-          className="w-full object-cover h-48 sm:h-auto sm:max-h-60"
+          className="w-full h-full object-cover"
           onError={() => setValidSrc(false)}
         />
       ) : (
-        <div className="w-full h-48 bg-gray-300 flex items-center justify-center opacity-30 sm:h-60 animate-pulse">
+        <div className="w-full h-full bg-gray-300 flex items-center justify-center opacity-30 animate-pulse">
           <span className="text-white text-2xl font-bold">No image</span>
         </div>
       )}

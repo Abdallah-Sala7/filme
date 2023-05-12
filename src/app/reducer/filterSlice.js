@@ -1,24 +1,45 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
-  filter: 'all',
-  sortBy: 'all',
+  genre: {title : "All", id : "all"},
+  sortBy: "release_date.desc",
+  page: 1,
 };
 
 export const filterSlice = createSlice({
-  name: 'filter',
+  name: "filter",
   initialState,
   reducers: {
-    setFilter: (state, action) => {
-      state.filter = action.payload;
+    setGenre: (state, action) => {
+      state.genre = action.payload;
     },
 
     setSortBy: (state, action) => {
       state.sortBy = action.payload;
-    }
+    },
+
+    incrementPage: (state) => {
+      if (state.page < 41) {
+        state.page += 1;
+      }
+    },
+
+    decrementPage: (state) => {
+      if (state.page > 1) {
+        state.page -= 1;
+      }
+    },
+    resetePage: (state) => {
+      state.page = 1;
+    },
   },
 });
 
-export const { setFilter, setSortBy } = filterSlice.actions;
+export const {
+  setGenre,
+  setSortBy,
+  incrementPage,
+  decrementPage,
+  resetePage,
+} = filterSlice.actions;
 export default filterSlice.reducer;

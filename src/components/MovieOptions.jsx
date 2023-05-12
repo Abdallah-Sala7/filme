@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { playIcon, rateStarIcon, speakerIcon } from "../assets";
 import { Rating } from "@mui/material";
@@ -67,17 +67,33 @@ const MovieOptions = () => {
         </a>
 
         {option.rating && (
-          <div className="absolute z-20 w-fit bottom-full left-1/2 -translate-x-1/2 -translate-y-2 flex items-center rounded-md py-5 px-8 bg-dark border border-yellow">
+          <div className="absolute z-20 w-11/12 bottom-full left-1/2 -translate-x-1/2 -translate-y-2 flex flex-col items-center rounded-lg py-5 px-4 bg-dark border border-yellow sm:w-96">
             <Rating
               name="simple-controlled"
               value={rateValue}
               precision={0.5}
               size="large"
-              className="yellow-filter"
+              className="yellow-filter mb-3"
               onChange={(event, newValue) => {
                 setRateValue(newValue);
               }}
             />
+
+            <textarea
+              name="review"
+              id="review"
+              cols="30"
+              rows="10"
+              placeholder="Write your review here..."
+              className="h-24 w-full mb-3 bg-grayLighter text-light border border-grayLight rounded-md p-2 outline-none resize-none"
+            ></textarea>
+
+            <button
+              className="text-yellow border font-semibold border-yellow py-2 px-4 w-full rounded-md hover:bg-yellow hover:text-dark transition-colors"
+              onClick={handleRateClick}
+            >
+              Login to leave a review
+            </button>
           </div>
         )}
       </div>
