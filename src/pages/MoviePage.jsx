@@ -18,6 +18,7 @@ const MoviePage = () => {
   const { data: movieData, isLoading: movieLoading } =
     useGetMovieDetailsQuery(param);
 
+  if(movieLoading) <div>loading... </div>
   return (
     <>
       <header className="relative z-10 flex  items-end w-full aspect-video max-h-96 rounded-lg overflow-hidden">
