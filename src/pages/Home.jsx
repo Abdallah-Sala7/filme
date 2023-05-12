@@ -4,9 +4,17 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import { gridIcon, poster, starIcon } from "../assets";
-import { MovieCard } from "../components";
+import { LoadingCard, MovieCard } from "../components";
+
+import {
+  useGetPopularMovieQuery,
+  useGetTopRatedMovieQuery,
+} from "../app/server/movieApi";
 
 const Home = () => {
+  const { data: popularMovie, isLoading : popularLoading } = useGetPopularMovieQuery();
+  const { data: topRateMovie, isLoading :topRateLoading } = useGetTopRatedMovieQuery();
+
   return (
     <>
       <header className="mb-10">
@@ -109,7 +117,7 @@ const Home = () => {
           slidesPerView={2.2}
           breakpoints={{
             576: {
-              slidesPerView: 3.7,
+              slidesPerView: 3.4,
             },
             768: {
               slidesPerView: 4.5,
@@ -163,59 +171,70 @@ const Home = () => {
 
           <img
             src={gridIcon}
-            alt=""
+            alt="grid icon"
             className="w-4 h-4 object-contain yellow-filter"
           />
         </a>
 
         <Swiper
           spaceBetween={10}
-          slidesPerView={2.2}
+          slidesPerView={2.5}
           breakpoints={{
             576: {
-              slidesPerView: 3.7,
+              slidesPerView: 3.2,
             },
             768: {
-              slidesPerView: 4.5,
-              spaceBetween: 20,
+              slidesPerView: 4.25,
+              spaceBetween: 15,
             },
             1024: {
-              slidesPerView: 5.5,
+              slidesPerView: 5.25,
             },
             1200: {
-              slidesPerView: 6.5,
+              slidesPerView: 6.25,
             },
           }}
           modules={[Autoplay, Pagination]}
           className="!py-5"
         >
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+          {topRateLoading ? (
+            <>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
+
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
+            </>
+          ) : (
+            topRateMovie.results.map((item, index) => (
+              <SwiperSlide key={index}>
+                <MovieCard movie={item} />
+                {console.log(item)}
+              </SwiperSlide>
+            ))
+          )}
         </Swiper>
       </section>
 
@@ -234,52 +253,63 @@ const Home = () => {
 
         <Swiper
           spaceBetween={10}
-          slidesPerView={2.2}
+          slidesPerView={2.5}
           breakpoints={{
             576: {
-              slidesPerView: 3.7,
+              slidesPerView: 3.2,
             },
             768: {
-              slidesPerView: 4.5,
-              spaceBetween: 20,
+              slidesPerView: 4.25,
+              spaceBetween: 15,
             },
             1024: {
-              slidesPerView: 5.5,
+              slidesPerView: 5.25,
             },
             1200: {
-              slidesPerView: 6.5,
+              slidesPerView: 6.25,
             },
           }}
           modules={[Autoplay, Pagination]}
           className="!py-5"
         >
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+          {popularLoading ? (
+            <>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
+
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
+            </>
+          ) : (
+            popularMovie.results.map((item, index) => (
+              <SwiperSlide key={index}>
+                <MovieCard movie={item} />
+                {console.log(item)}
+              </SwiperSlide>
+            ))
+          )}
         </Swiper>
       </section>
     </>

@@ -1,24 +1,33 @@
 import React from "react";
-import {
-  heartIcon,
-  poster,
-  shareIcon,
-  starIcon,
-} from "../assets";
+import { heartIcon, poster, shareIcon, starIcon } from "../assets";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
-import { MovieCard, MovieOptions } from "../components";
+import { LoadingCard, MovieCard, MovieOptions } from "../components";
+import { useGetPopularMovieQuery } from "../app/server/movieApi";
+import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
+import { useParams } from "react-router-dom";
 
 const MoviePage = () => {
+  const param = useParams().movieId;
+
+  const { data, isLoading } = useGetPopularMovieQuery();
+
+  const { data: movieData, isLoading: movieLoading } =
+    useGetMovieDetailsQuery(param);
+
   return (
     <>
-      <header className="relative z-10 flex  items-end w-full aspect-video max-h-80 rounded-lg overflow-hidden">
+      <header className="relative z-10 flex  items-end w-full aspect-video max-h-96 rounded-lg overflow-hidden">
         <div className="absolute inset-0 -z-10 w-full h-full">
           <img
-            src={poster}
+            src={
+              movieData?.backdrop_path
+                ? `https://image.tmdb.org/t/p/original/${movieData?.backdrop_path}`
+                : poster
+            }
             alt="poster img"
             className="w-full h-full object-cover bg-fixed brightness-50"
           />
@@ -27,7 +36,7 @@ const MoviePage = () => {
         <div className="w-full px-4 py-2 sm:py-4 sm:px-8">
           <div className="flex justify-between items-center mb-3 sm:mb-5">
             <h1 className="text-white text-lg font-bold uppercase sm:text-3xl">
-              My last hope
+              {movieData?.title}
             </h1>
 
             <div className="flex items-center gap-2">
@@ -61,12 +70,17 @@ const MoviePage = () => {
 
           <div className="flex justify-between items-center">
             <div className="flex items-center text-grayDark text-xs font-bold gap-3 sm:text-sm">
-              <span className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark first-of-type:after:w-0">
-                action
-              </span>
+              {movieData?.genres.map((genre, idx) => (
+                <span
+                  key={idx}
+                  className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark first-of-type:after:w-0"
+                >
+                  {genre.name}
+                </span>
+              ))}
 
               <span className="relative after:absolute after:top-1/2 after:-left-2 after:-translate-y-1/2 after:w-1 after:h-1 after:rounded-full after:bg-grayDark first-of-type:after:w-0">
-                action
+                {movieData.popularity}
               </span>
             </div>
 
@@ -123,10 +137,8 @@ const MoviePage = () => {
             overview
           </h1>
 
-          <p className="text-xs text-grayDark font-semibold sm:text-sm">
-            Frustrated by the constant quarrel between the members of his
-            dysfunctional family, Max loses interest to celebrate Christmas,
-            awakening Krampus, a demon who will punish his entire family.
+          <p className="text-sm text-grayDark font-semibold sm:text-base">
+            {movieData?.overview}
           </p>
         </div>
       </section>
@@ -138,52 +150,62 @@ const MoviePage = () => {
 
         <Swiper
           spaceBetween={10}
-          slidesPerView={2.2}
+          slidesPerView={2.5}
           breakpoints={{
             576: {
-              slidesPerView: 3.7,
+              slidesPerView: 3.2,
             },
             768: {
-              slidesPerView: 4.5,
-              spaceBetween: 20,
+              slidesPerView: 4.25,
+              spaceBetween: 15,
             },
             1024: {
-              slidesPerView: 5.5,
+              slidesPerView: 5.25,
             },
             1200: {
-              slidesPerView: 6.5,
+              slidesPerView: 6.25,
             },
           }}
           modules={[Autoplay, Pagination]}
           className="!py-5"
         >
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+          {isLoading ? (
+            <>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
 
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
+
+              <SwiperSlide>
+                <LoadingCard />
+              </SwiperSlide>
+            </>
+          ) : (
+            data.results.map((item, index) => (
+              <SwiperSlide key={index}>
+                <MovieCard movie={item} />
+              </SwiperSlide>
+            ))
+          )}
         </Swiper>
       </section>
     </>

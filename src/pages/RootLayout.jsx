@@ -32,7 +32,7 @@ const RootLayout = () => {
       <div
         className={`fixed inset-0 z-40 w-screen h-screen bg-grayLighter opacity-75 ${
           openAside ? "block" : "hidden"
-        } lg:hidden}`}
+        } lg:hidden`}
         aria-labelledby="slide-over-title"
         onClick={() => {
           dispatch(setOpenAside());

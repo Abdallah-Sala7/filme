@@ -1,35 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { moviePoster } from "../assets";
 import { CircularProgressbar } from "react-circular-progressbar";
 
-const MovieCard = ({ poster = moviePoster, title = "movie", id = 1 }) => {
+const MovieCard = ({ movie }) => {
+  const [validSrc, setValidSrc] = useState(true);
+
   return (
     <Link
-      to={`/movies/${id}`}
-      className="flex flex-col rounded-md overflow-hidden bg-grayLighter transition-transform hover:scale-105"
+      to={`/movies/${movie.id}`}
+      className={`flex flex-col rounded-md overflow-hidden bg-grayLighter transition-all hover:scale-105`}
       aria-labelledby="modal-headline"
     >
-      <img
-        src={poster}
-        alt={title}
-        width={170}
-        height={255}
-        className="w-full object-cover"
-      />
-      <div className="relative py-5 px-2  md:py-6">
-        <div className="absolute bottom-full translate-y-1/2 left-2 w-9 h-9 flex items-center justify-center bg-dark rounded-full">
-          <span className="text-white text-xs font-semibold">
-            {(3.5 * 100) / 5}% 
+      <div className="grow">
+      {validSrc ? (
+        <img
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          alt={movie.title}
+          loading="lazy"
+          className="w-full object-cover h-48 sm:h-auto sm:max-h-60"
+          onError={() => setValidSrc(false)}
+        />
+      ) : (
+        <div className="w-full h-48 bg-gray-300 flex items-center justify-center opacity-30 sm:h-60 animate-pulse">
+          <span className="text-white text-2xl font-bold">No image</span>
+        </div>
+      )}
+      </div>
+
+      <div className="relative py-5 px-2 align-bottom md:py-6">
+        <div className="absolute bottom-full translate-y-1/2 left-2 w-7 h-7 flex items-center justify-center bg-dark rounded-full sm:w-9 sm:h-9">
+          <span className="text-white tracking-tighter text-xs font-normal sm:tracking-normal sm:font-semibold">
+            {Math.round((movie.vote_average * 100) / 10)}%
           </span>
 
           <CircularProgressbar
-            value={3.5}
-            maxValue={5}
+            value={movie.vote_average}
+            maxValue={10}
+            className="w-8 h-8 sm:w-10 sm:h-10"
             styles={{
               root: {
-                width: "40px",
-                height: "40px",
                 margin: "0 auto",
                 position: "absolute",
                 top: "50%",
@@ -37,7 +46,12 @@ const MovieCard = ({ poster = moviePoster, title = "movie", id = 1 }) => {
                 transform: "translate(-50%, -50%)",
               },
               path: {
-                stroke: "#ffa501",
+                stroke:
+                  movie.vote_average > 7
+                    ? "#10B981"
+                    : movie.vote_average > 5
+                    ? "#F59E0B"
+                    : "#EF4444",
                 strokeWidth: "5",
               },
               trail: {
@@ -47,7 +61,9 @@ const MovieCard = ({ poster = moviePoster, title = "movie", id = 1 }) => {
           />
         </div>
 
-        <h1 className="line-clamp-1 text-light font-bold text-sm">The Real gift</h1>
+        <h1 className="line-clamp-1 text-light font-bold text-sm">
+          {movie.title}
+        </h1>
       </div>
     </Link>
   );

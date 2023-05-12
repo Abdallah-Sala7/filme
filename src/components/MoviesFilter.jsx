@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { allIcon, calendarIcon, fireIcon, rateStarIcon } from "../assets";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilter, setSortBy } from "../app/reducer/filterSlice";
@@ -13,21 +12,19 @@ const MoviesFilter = () => {
   };
 
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center gap-1">
-        <select
-          name="genre"
-          id="genre"
-          className="py-1 pl-4 pr-10 text-lg font-semibold border bg-dark rounded-none text-light cursor-pointer"
-          onChange={(e) => dispatch(setFilter(e.target.value))}
-        >
-          <option value="all">All</option>
-          <option value="action">Action</option>
-          <option value="drama">Drama</option>
-          <option value="comedy">Comedy</option>
-          <option value="horror">Horror</option>
-        </select>
-      </div>
+    <div className="flex justify-between items-stretch">
+      <select
+        name="genre"
+        id="genre"
+        className="py-1 text-lg pl-4 font-semibold border bg-dark rounded-none text-light cursor-pointer sm:pr-10"
+        onChange={(e) => dispatch(setFilter(e.target.value))}
+      >
+        <option value="all">All</option>
+        <option value="action">Action</option>
+        <option value="drama">Drama</option>
+        <option value="comedy">Comedy</option>
+        <option value="horror">Horror</option>
+      </select>
 
       <div className="flex items-center">
         <a

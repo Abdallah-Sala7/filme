@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   filter: 'all',
-  sortBy: 'rating',
+  sortBy: 'all',
 };
 
 export const filterSlice = createSlice({

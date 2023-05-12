@@ -5,3 +5,4 @@ export {default as MovieCard} from './MovieCard'
 export {default as MoviesFilter} from './MoviesFilter'
 
 export {default as MovieOptions} from './MovieOptions'
+export {default as LoadingCard} from './LoadingCard'

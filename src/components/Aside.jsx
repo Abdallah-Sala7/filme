@@ -8,7 +8,7 @@ const Aside = () => {
 
   return (
     <aside
-      className={`fixed top-0 left-0 z-50 h-screen w-56 flex flex-col border-r-4  border-yellow bg-dark transition-transform duration-300 ${
+      className={`fixed top-0 left-0 z-50 h-screen w-56 flex flex-col justify-between border-r-4 border-yellow bg-dark transition-transform duration-300 ${
         openAside ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0`}
     >
@@ -66,7 +66,7 @@ const Aside = () => {
       </div>
 
 
-      <ul className="mt-auto border-t border-grayLighter">
+      <ul className="border-t border-grayLighter">
         <li>
           <a
             href="#"
