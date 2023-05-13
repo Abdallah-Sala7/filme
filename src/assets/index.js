@@ -3,6 +3,7 @@ export {default as moviePoster} from './imgs/movie_poster.jpg'
 export {default as logo} from './imgs/logo.png'
 export {default as poster} from './imgs/poster.jpg'
 export {default as poster2} from './imgs/poster2.jpg'
+export {default as authBg} from './imgs/background.jpg'
 
 
 // expotr icons
@@ -25,7 +26,11 @@ export {default as speakerIcon} from './icons/speaker.png'
 export {default as mailIcon} from './icons/mail.png'
 export {default as chatIcon} from './icons/chat.png'
 export {default as privacyIcon} from './icons/privacy-policy.png'
-
 export {default as arrowIcon} from './icons/arrow-right.png'
+export {default as downArrowIcon} from './icons/down-arrow.png'
+
+export {default as addUserIcon} from './icons/add-user.png'
+export {default as enterIcon} from './icons/enter.png'
+export {default as lockIcon} from './icons/padlock.png'
 
 

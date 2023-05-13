@@ -1,11 +1,8 @@
-import React from "react";
-import { heartIcon, poster, shareIcon, starIcon } from "../assets";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, FreeMode, } from "swiper";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/free-mode";
+import { Pagination, Autoplay, FreeMode } from "swiper";
+import { useGetAllMovieQuery } from "../app/server/movieApi";
+import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
+import { useParams } from "react-router-dom";
 
 import {
   LoadingCard,
@@ -14,9 +11,8 @@ import {
   MovieOptions,
   SwiperNav,
 } from "../components";
-import { useGetAllMovieQuery } from "../app/server/movieApi";
-import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
-import { useParams } from "react-router-dom";
+
+import { heartIcon, poster, shareIcon, starIcon } from "../assets";
 
 const MoviePage = () => {
   const param = useParams();
@@ -27,10 +23,9 @@ const MoviePage = () => {
     sortBy: "popularity.desc",
   });
 
-  const { data: movieData, isSuccess: movieSuccess } =
-    useGetMovieDetailsQuery(param.movieId);
-
-  console.log(movieData);
+  const { data: movieData, isSuccess: movieSuccess } = useGetMovieDetailsQuery(
+    param.movieId
+  );
 
   return (
     <>
@@ -186,7 +181,7 @@ const MoviePage = () => {
               slidesPerView: 6.25,
             },
           }}
-          modules={[Autoplay, Pagination,FreeMode]}
+          modules={[Autoplay, Pagination, FreeMode]}
           className="!py-5"
         >
           {!forYouSuccess ? (

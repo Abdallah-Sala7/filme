@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { LoadingCard, MovieCard, MoviesFilter } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useGetAllMovieQuery } from "../app/server/movieApi";
 import {
   decrementPage,
@@ -11,12 +10,11 @@ import {
 
 const Movies = () => {
   const dispatch = useDispatch();
-
   const { sortBy, genre, page } = useSelector((state) => state.filter);
   const { data, isSuccess, error } = useGetAllMovieQuery({
     page,
     genre: genre.id,
-    sortBy
+    sortBy,
   });
 
   useEffect(() => {
@@ -26,7 +24,6 @@ const Movies = () => {
   useEffect(() => {
     dispatch(resetePage());
   }, [sortBy, genre]);
-
   return (
     <>
       <MoviesFilter />

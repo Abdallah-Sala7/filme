@@ -1,13 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, FreeMode } from "swiper";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/free-mode";
-
-import { gridIcon, playIcon, poster, poster2, starIcon } from "../assets";
+import { gridIcon, poster, poster2 } from "../assets";
 import { HeaderCard, LoadingCard, MovieCard, SwiperNav } from "../components";
-
 import { useGetAllMovieQuery } from "../app/server/movieApi";
+import { useDispatch } from "react-redux";
+import { setGenre, setSortBy } from "../app/reducer/filterSlice";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { data: popularMovie, isSuccess: popularSuccess } = useGetAllMovieQuery(
@@ -16,6 +14,16 @@ const Home = () => {
   const { data: topRateMovie, isSuccess: topRateSuccess } = useGetAllMovieQuery(
     { page: 1, genre: "all", sortBy: "vote_average.desc" }
   );
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleGenreClick = (e, sort) => {
+    e.preventDefault();
+    dispatch(setGenre({ title: "All", id: "all" }));
+    dispatch(setSortBy(sort));
+    navigate("/movies");
+  };
 
   return (
     <>
@@ -31,7 +39,7 @@ const Home = () => {
           pagination={{
             clickable: true,
           }}
-          modules={[Autoplay, Pagination]}
+          modules={[Pagination]}
         >
           <SwiperSlide>
             <HeaderCard poster={poster} title={"The Final Season"} rate={9.2} />
@@ -107,7 +115,13 @@ const Home = () => {
       </section> */}
 
       <section className="mb-5">
-        <a href="#" className="flex justify-between items-center">
+        <a
+          href="#"
+          className="flex justify-between items-center"
+          onClick={(e) => {
+            handleGenreClick(e, "vote_average.desc");
+          }}
+        >
           <h1 className="text-yellow font-semibold text-xl capitalize">
             top rated
           </h1>
@@ -123,6 +137,7 @@ const Home = () => {
           spaceBetween={10}
           slidesPerView={2.5}
           freeMode={true}
+          updateOnWindowResize={true}
           breakpoints={{
             576: {
               slidesPerView: 3.2,
@@ -138,7 +153,7 @@ const Home = () => {
               slidesPerView: 6.25,
             },
           }}
-          modules={[Autoplay, Pagination, FreeMode]}
+          modules={[Pagination, FreeMode]}
           className="!py-5"
         >
           {!topRateSuccess ? (
@@ -183,7 +198,13 @@ const Home = () => {
       </section>
 
       <section className="mb-5">
-        <a href="#" className="flex justify-between items-center">
+        <a
+          href="#"
+          className="flex justify-between items-center"
+          onClick={(e) => {
+            handleGenreClick(e, "popularity.desc");
+          }}
+        >
           <h1 className="text-yellow font-semibold text-xl capitalize">
             popular
           </h1>

@@ -13,11 +13,14 @@ module.exports = {
         grayLighter: "#141421",
         grayHover: '#ffffff40',
         darkTow: '#1a1a1a',
+        authBg: '#0a101d',
+        authBorder: '#0a111d',
       },
 
       spacing:{
         255: "255px",
         150: "150px",
+        550: "550px",
       },
 
       filter: {

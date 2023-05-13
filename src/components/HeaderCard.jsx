@@ -2,7 +2,7 @@ import { playIcon, starIcon } from "../assets";
 
 const HeaderCard = ({ poster, title, rate }) => {
   return (
-    <div className="relative z-10 p-8 flex flex-col justify-end rounded-lg overflow-hidden w-full aspect-video">
+    <div className="relative z-10 p-8 flex flex-col justify-end rounded-lg overflow-hidden w-full aspect-video h-64 max-h-96 sm:h-auto">
       <a href="#" className="absolute inset-0 flex -z-10">
         <img
           src={poster}
