@@ -17,7 +17,7 @@ export const movieDetailsApi = createApi({
   tagTypes: ["MovieDetails"],
   endpoints: (builder) => ({
     getMovieDetails: builder.query({
-      query: (id) => `movie/${id}?api_key=${api_key}&language=en-US`,
+      query: (id) => `movie/${id}?api_key=${api_key}&language=en-US&append_to_response=videos,images,credits,reviews`,
       providesTags: ["MovieDetails"],
     })
   }),

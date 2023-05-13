@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   genre: {title : "All", id : "all"},
-  sortBy: "release_date.desc",
+  sortBy: "primary_release_date.desc",
   page: 1,
 };
 

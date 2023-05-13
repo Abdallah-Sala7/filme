@@ -42,17 +42,17 @@ const MoviesFilter = () => {
         <a
           href="#"
           className={`flex items-center gap-0.5 py-1 px-3 border border-light transition hover:bg-light group ${
-            sortBy === "release_date.desc" ? "bg-light text-dark" : "text-light"
+            sortBy === "primary_release_date.desc" ? "bg-light text-dark" : "text-light"
           }`}
           title="Newest"
           aria-label="Newest movies"
-          onClick={(e) => handleSort(e, "release_date.desc")}
+          onClick={(e) => handleSort(e, "primary_release_date.desc")}
         >
           <img
             src={allIcon}
             alt="all icon"
             className={`w-6 h-6 object-contain transition-all group-hover:invert-0 ${
-              sortBy === "release_date.desc" ? "invert-0" : "invert"
+              sortBy === "primary_release_date.desc" ? "invert-0" : "invert"
             }`}
           />
 
@@ -108,17 +108,17 @@ const MoviesFilter = () => {
         <a
           href="#"
           className={`flex items-center gap-0.5 py-1 px-3 border border-light transition hover:bg-light group ${
-            sortBy === "release_date.asc" ? "bg-light text-dark" : "text-light"
+            sortBy === "primary_release_date.asc" ? "bg-light text-dark" : "text-light"
           }`}
-          title="release_date.asc"
+          title="primary_release_date.asc"
           aria-label="Sort by oldest"
-          onClick={(e) => handleSort(e, "release_date.asc")}
+          onClick={(e) => handleSort(e, "primary_release_date.asc")}
         >
           <img
             src={calendarIcon}
             alt="all icon"
             className={`w-6 h-6 object-contain transition-all group-hover:invert-0 ${
-              sortBy === "release_date.asc" ? "invert-0" : "invert"
+              sortBy === "primary_release_date.asc" ? "invert-0" : "invert"
             }`}
           />
 

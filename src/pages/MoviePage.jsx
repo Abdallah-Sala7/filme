@@ -96,7 +96,8 @@ const MoviePage = () => {
 
                 <div className="flex items-center gap-1 sm:gap-2">
                   <p className="text-grayDark font-bold text-sm sm:text-base">
-                    4.5<span className="text-xs sm:text-sm">/5</span>
+                    {Math.min(movieData.vote_average, 10).toFixed(1)}
+                    <span className="text-xs sm:text-sm">/10</span>
                   </p>
 
                   <div className="flex items-center sm:gap-0.5">
@@ -150,6 +151,33 @@ const MoviePage = () => {
               <p className="text-sm text-grayDark font-semibold sm:text-base">
                 {movieData?.overview}
               </p>
+            </div>
+          </section>
+
+          <section className="py-5">
+            <h1 className="capitalize text-light font-semibold text-xl mb-2">
+              cast
+            </h1>
+
+            <div className="flex gap-2 overflow-x-auto sm:gap-3 sm:overflow-hidden">
+              {movieData?.credits.cast.map((cast, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col items-center gap-1 sm:gap-2"
+                >
+                  <div className="relative w-16 h-w-16 sm:w-28 sm:h-28">
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${cast.profile_path}`}
+                      alt="cast"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+
+                  <p className="text-center text-grayDark font-semibold text-xs sm:text-sm line-clamp-1">
+                    {cast.name}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
         </>
