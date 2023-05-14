@@ -5,7 +5,7 @@ const AuthButton = ({ handleClick, title, icon }) => {
     <a
       href="#"
       onClick={handleClick}
-      className="w-full py-1.5 flex items-center justify-center mb-4 border border-yellow rounded-md gap-1 transition-all group hover:bg-yellow"
+      className="w-full py-1.5 flex items-center justify-center mb-6 border border-yellow rounded-md gap-1 transition-all group hover:bg-yellow"
     >
       <img
         src={icon}

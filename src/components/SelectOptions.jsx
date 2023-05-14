@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setGenre } from "../app/reducer/filterSlice";
+import { resetePage, setGenre } from "../app/reducer/filterSlice";
 import { useState } from "react";
 import { genres } from "../data/genres_data";
 import { downArrowIcon } from "../assets";
@@ -12,6 +12,7 @@ const SelectOptions = () => {
 
   const handlegenres = (e, genre) => {
     dispatch(setGenre(genre));
+    dispatch(resetePage());
     setOpenSelect(false);
     e.preventDefault();
   };

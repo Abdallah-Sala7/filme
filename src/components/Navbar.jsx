@@ -3,14 +3,14 @@ import { closeIcon, logo, menuIcon, searchIcon, userIcon } from "../assets";
 import SearchBar from "./SearchBar";
 import { useDispatch } from "react-redux";
 import { setOpenAside } from "../app/reducer/appSlice";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
 
 const Navbar = () => {
-  const [showSearchBar, setShowSearchBar] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
 
+  const [showSearchBar, setShowSearchBar] = useState(false);
   const { data, isSuccess } = useGetMovieDetailsQuery(
     location.pathname.split("/")[2]
   );
@@ -27,11 +27,11 @@ const Navbar = () => {
 
   return (
     <nav className="px-2 py-5 md:px-4">
-      <div className="flex justify-between items-center gap-3 mb-3 lg:mb-0">
+      <div className="flex justify-between items-center gap-3 mb-3 lg:mb-0 lg:gap-5">
         <div
-          className={`flex gap-3 items-center ${
+          className={`flex flex-1 gap-3 items-center lg:block ${
             showSearchBar ? "hidden" : "block"
-          } lg:block`}
+          }`}
         >
           <a
             href="#"
@@ -53,7 +53,7 @@ const Navbar = () => {
             />
           </a>
 
-          <h1 className="hidden text-white capitalize text-xl font-semibold lg:block">
+          <h1 className="hidden  text-white capitalize text-xl font-semibold lg:line-clamp-1">
             {location.pathname === "/"
               ? "home"
               : !isNaN(location.pathname.split("/")[2])
@@ -63,14 +63,14 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`flex-1 max-w-md h-9 ${
+          className={`max-w-md h-9 lg:flex-1 lg:block ${
             showSearchBar ? "block" : "hidden"
-          } lg:block`}
+          }`}
         >
           <SearchBar />
         </div>
 
-        <div className="flex gap-3 items-center">
+        <div className="flex flex-1 justify-end gap-3 items-center">
           <a
             href="#"
             className="p-2 border border-yellow opacity-70 hover:opacity-100 rounded-sm lg:hidden"
@@ -83,8 +83,8 @@ const Navbar = () => {
             />
           </a>
 
-          <a
-            href="#"
+          <Link
+            to="/auth/login"
             className="p-2 border border-yellow opacity-70 hover:opacity-100 rounded-sm lg:hidden"
           >
             <img
@@ -92,21 +92,21 @@ const Navbar = () => {
               alt="menu icon"
               className="w-5 h-5 object-contain yellow-filter"
             />
-          </a>
+          </Link>
 
-          <a
-            href="#"
+          <Link
+            to="/auth/register"
             className="hidden p-2 text-white hover:text-yellow lg:block"
           >
             Sign up
-          </a>
+          </Link>
 
-          <a
-            href="#"
+          <Link
+            to="/auth/login"
             className="hidden py-1 px-3 border border-yellow text-yellow opacity-70 hover:opacity-100 rounded-md lg:block"
           >
             Sign in
-          </a>
+          </Link>
         </div>
       </div>
 

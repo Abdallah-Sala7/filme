@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { genres } from "../data/genres_data";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Interests = () => {
+  const navigate = useNavigate();
   const [interestsGenre, setInterestsGenre] = useState([]);
   const [openToast, setOpenToast] = useState(false);
 
@@ -22,8 +23,16 @@ const Interests = () => {
     e.preventDefault();
   };
 
+  const handleNext = (e) => {
+    if (interestsGenre.length === 3) {
+      localStorage.setItem("interestsGenre", JSON.stringify(interestsGenre));
+      navigate("/");
+    }
+    e.preventDefault();
+  };
+
   return (
-    <section className="py-16 px-2 bg-dark md:py-20">
+    <section className="w-full max-w-sm mx-auto">
       <div className="w-full max-w-xl mx-auto mb-5">
         <div className="text-center mb-5">
           <h1 className="text-lg text-white font-semibold">
@@ -34,22 +43,25 @@ const Interests = () => {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-1.5 mb-5 md:gap-2">
-          {Object.keys(genres).map((genre, index) => (
-            <a
-              href="#"
-              key={index}
-              className={`py-2 px-3 rounded font-bold md:text-lg transition-all ${
-                interestsGenre.includes(genres[genre])
-                  ? "bg-yellow text-dark"
-                  : "bg-grayLighter text-light"
-              }`}
-              onClick={(e) => {
-                handlegenres(e, genres[genre]);
-              }}
-            >
-              {genre}
-            </a>
-          ))}
+          {Object.keys(genres).map(
+            (genre, index) =>
+              genres[genre] !== "all" && (
+                <a
+                  href="#"
+                  key={index}
+                  className={`py-2 px-3 rounded font-bold md:text-lg transition-all ${
+                    interestsGenre.includes(genres[genre])
+                      ? "bg-yellow text-dark"
+                      : "bg-dark text-light"
+                  }`}
+                  onClick={(e) => {
+                    handlegenres(e, genres[genre]);
+                  }}
+                >
+                  {genre}
+                </a>
+              )
+          )}
         </div>
       </div>
 
@@ -63,8 +75,9 @@ const Interests = () => {
         </div>
       </div>
 
-      <Link
-        to={"/"}
+      <a
+        href={"#"}
+        onClick={handleNext}
         className={`flex items-center justify-center mx-auto w-9/12 py-3 rounded-md capitalize text-lg font-bold bg-yellow text-white md:text-xl md:w-255 ${
           interestsGenre.length === 3
             ? "opacity-100 after-animation"
@@ -72,7 +85,7 @@ const Interests = () => {
         }`}
       >
         next
-      </Link>
+      </a>
     </section>
   );
 };

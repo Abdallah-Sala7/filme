@@ -1,45 +1,41 @@
-import { playIcon, starIcon } from "../assets";
+const HeaderCard = ({ movie }) => {
+  const date = new Date(movie?.release_date).toDateString().split(" ");
 
-const HeaderCard = ({ poster, title, rate }) => {
   return (
-    <div className="relative z-10 p-8 flex flex-col justify-end rounded-lg overflow-hidden w-full aspect-video h-64 max-h-96 sm:h-auto">
-      <a href="#" className="absolute inset-0 flex -z-10">
+    <div className="relative z-10 px-3 py-6 flex flex-col justify-end rounded-lg overflow-hidden w-full aspect-video h-64 max-h-96 sm:h-auto md:py-8 md:px-6">
+      <div className="absolute inset-0 flex -z-10">
         <img
-          src={poster}
-          alt=""
+          src={"https://image.tmdb.org/t/p/original" + movie?.backdrop_path}
+          alt={movie?.title}
           className="w-full h-full object-cover filter brightness-50"
         />
-      </a>
+      </div>
 
       <div className="flex items-center gap-3 mb-2">
-        <h1 className="font-semibold text-lg text-white capitalize">
-          {title}{" "}
+        <h1 className="font-semibold text-base text-white sm:text-lg">
+          {movie?.title}{" "}
         </h1>
 
-        <div className="flex items-center gap-1 py-1 px-1.5 bg-yellow rounded">
-          <img
-            src={starIcon}
-            alt="star icon"
-            className="w-4 h-4 object-contain invert"
-          />
-          <span className="font-semibold text-white text-sm">{rate}/10</span>
+        <div className="flex items-center gap-1 p-1 bg-yellow rounded after-animation sm:py-1 sm:px-1.5">
+          <span className="font-semibold text-xs capitalize text-white sm:text-sm">
+            upcomming
+          </span>
         </div>
       </div>
 
-      <p className="hidden text-white text-sm leading-6 md:pr-16 lg:pr-40 md:block">
-        The survivors of a plane crash find themselves stranded on a mysterious
-        island. They are forced to work together for their survival when they
-        realise that they...
+      <p className="line-clamp-3 capitalize text-white text-sm md:line-clamp-none md:text-base">
+        {movie?.overview}
       </p>
 
-      <button className="absolute bottom-2 right-2 flex items-center gap-0.5 rounded-md text-white font-semibold md:py-2 md:px-4 md:after-animation md:bg-yellow md:right-3 md:bottom-3">
-        <img
-          src={playIcon}
-          alt="play icon"
-          className="w-10 h-10 yellow-filter object-contain md:invert md:w-6 md:h-6"
-        />
-        <span className="hidden md:block ">watch now</span>
-      </button>
+      <p className="absolute font-serif top-2 right-2 flex flex-col items-center justify-center gap-0.5 rounded-md text-white after-animationbg-yellow">
+        <span className="text-2xl font-bold !leading-none sm:text-4xl">
+          {date[2]}
+        </span>
+
+        <span className="text-sm font-medium sm:text-base">
+          {date[1]} - {date[3]}
+        </span>
+      </p>
     </div>
   );
 };

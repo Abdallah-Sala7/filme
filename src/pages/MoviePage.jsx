@@ -1,28 +1,24 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, FreeMode } from "swiper";
 import { useGetAllMovieQuery } from "../app/server/movieApi";
 import { useGetMovieDetailsQuery } from "../app/server/movieDetailsApi";
 import { useParams } from "react-router-dom";
 
 import {
-  LoadingCard,
+  CastSwiper,
   LoadingMoviePage,
-  MovieCard,
   MovieOptions,
-  SwiperNav,
+  MySwiper,
 } from "../components";
 
-import { heartIcon, poster, shareIcon, starIcon } from "../assets";
+import { poster, shareIcon } from "../assets";
+import { Rating } from "@mui/material";
 
 const MoviePage = () => {
   const param = useParams();
-
   const { data: forYouData, isSuccess: forYouSuccess } = useGetAllMovieQuery({
     page: 1,
     genre: "all",
     sortBy: "popularity.desc",
   });
-
   const { data: movieData, isSuccess: movieSuccess } = useGetMovieDetailsQuery(
     param.movieId
   );
@@ -49,18 +45,7 @@ const MoviePage = () => {
                   {movieData?.title}
                 </h1>
 
-                <div className="absolute top-2 left-0 w-full px-4 flex items-center justify-between gap-2 sm:static sm:w-auto sm:justify-center sm:px-0">
-                  <a
-                    href="#"
-                    className="opacity-70 w-9 h-9 flex items-center justify-center rounded-full border border-white hover:bg-grayHover hover:opacity-100 sm:w-12 sm:h-12"
-                  >
-                    <img
-                      src={heartIcon}
-                      alt="heart icon"
-                      className="w-4 h-4 object-contain invert sm:w-5 sm:h-5"
-                    />
-                  </a>
-
+                <div className="absolute top-2 right-0 px-4 sm:static sm:w-auto sm:px-0">
                   <a
                     href="#"
                     className="opacity-70 h-9 px-3 flex items-center justify-center gap-2 rounded-full border border-white hover:bg-grayHover hover:opacity-100 sm:h-12 sm:px-5"
@@ -101,39 +86,18 @@ const MoviePage = () => {
                   </p>
 
                   <div className="flex items-center sm:gap-0.5">
-                    <img
-                      src={starIcon}
-                      alt="star icon"
-                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                    />
-                    <img
-                      src={starIcon}
-                      alt="star icon"
-                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                    />
-                    <img
-                      src={starIcon}
-                      alt="star icon"
-                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                    />
-                    <img
-                      src={starIcon}
-                      alt="star icon"
-                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
-                    />
-                    <img
-                      src={starIcon}
-                      alt="star icon"
-                      className="w-4 h-4 object-contain yellow-filter sm:h-5 sm:w-5"
+                    <Rating
+                      name="half-rating-read"
+                      defaultValue={movieData.vote_average / 2}
+                      precision={0.5}
+                      size="medium"
+                      className="yellow-filter"
+                      readOnly
                     />
                   </div>
 
-                  <p className="text-grayDark font-bold">
-                    8.5<span className="text-xs sm:text-sm">/10</span>
-                  </p>
-
                   <div className="px-1 rounded bg-yellow">
-                    <span className="text-dark font-bold text-sm">IMDb</span>
+                    <span className="text-dark font-bold text-sm">TMDB</span>
                   </div>
                 </div>
               </div>
@@ -141,7 +105,7 @@ const MoviePage = () => {
           </header>
 
           <section className="py-5">
-            <MovieOptions />
+            <MovieOptions movie={movieData} />
 
             <div>
               <h1 className="capitalize text-light font-semibold text-xl mb-2">
@@ -155,30 +119,11 @@ const MoviePage = () => {
           </section>
 
           <section className="py-5">
-            <h1 className="capitalize text-light font-semibold text-xl mb-2">
-              cast
+            <h1 className="text-yellow font-semibold text-xl capitalize mb-4">
+              for you
             </h1>
 
-            <div className="flex gap-2 overflow-x-auto sm:gap-3 sm:overflow-hidden">
-              {movieData?.credits.cast.map((cast, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col items-center gap-1 sm:gap-2"
-                >
-                  <div className="relative w-16 h-w-16 sm:w-28 sm:h-28">
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${cast.profile_path}`}
-                      alt="cast"
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                  </div>
-
-                  <p className="text-center text-grayDark font-semibold text-xs sm:text-sm line-clamp-1">
-                    {cast.name}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <CastSwiper data={movieData?.credits.cast} />
           </section>
         </>
       ) : (
@@ -190,67 +135,7 @@ const MoviePage = () => {
           for you
         </h1>
 
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={2.5}
-          freeMode={true}
-          breakpoints={{
-            576: {
-              slidesPerView: 3.2,
-            },
-            768: {
-              slidesPerView: 4.25,
-              spaceBetween: 15,
-            },
-            1024: {
-              slidesPerView: 5.25,
-            },
-            1200: {
-              slidesPerView: 6.25,
-            },
-          }}
-          modules={[Autoplay, Pagination, FreeMode]}
-          className="!py-5"
-        >
-          {!forYouSuccess ? (
-            <>
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-            </>
-          ) : (
-            forYouData.results.map((item, index) => (
-              <SwiperSlide key={index}>
-                <MovieCard movie={item} />
-              </SwiperSlide>
-            ))
-          )}
-          <SwiperNav />
-        </Swiper>
+        <MySwiper data={forYouData?.results} isLoading={forYouSuccess} />
       </section>
     </>
   );

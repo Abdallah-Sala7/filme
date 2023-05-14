@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenAside } from "../app/reducer/appSlice";
-import { Outlet, useLocation } from "react-router-dom";
-import { Navbar, Aside, ScrollToTop } from "../components";
+import { Outlet } from "react-router-dom";
+import { Navbar, Aside } from "../components";
 
 const RootLayout = () => {
   const dispatch = useDispatch();
@@ -17,30 +17,27 @@ const RootLayout = () => {
   }, [openAside]);
 
   return (
-    <>
-      <ScrollToTop />
+    <div className="flex bg-dark">
+      <Aside />
 
-      <div className="flex bg-dark">
-        <Aside />
-        <div className="flex-1 w-full lg:pl-56">
-          <Navbar />
+      <div className="flex-1 w-full lg:pl-56">
+        <Navbar />
 
-          <main className="px-2 md:px-4">
-            <Outlet />
-          </main>
-        </div>
-
-        <div
-          className={`fixed inset-0 z-40 w-screen h-screen bg-grayLighter opacity-75 ${
-            openAside ? "block" : "hidden"
-          } lg:hidden`}
-          aria-labelledby="slide-over-title"
-          onClick={() => {
-            dispatch(setOpenAside());
-          }}
-        ></div>
+        <main className="px-2 md:px-4">
+          <Outlet />
+        </main>
       </div>
-    </>
+
+      <div
+        className={`fixed inset-0 z-40 w-screen h-screen bg-grayLighter opacity-75 ${
+          openAside ? "block" : "hidden"
+        } lg:hidden`}
+        aria-labelledby="slide-over-title"
+        onClick={() => {
+          dispatch(setOpenAside());
+        }}
+      ></div>
+    </div>
   );
 };
 

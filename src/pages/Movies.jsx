@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetAllMovieQuery } from "../app/server/movieApi";
 import {
   decrementPage,
-  incrementPage,
-  resetePage,
+  incrementPage
 } from "../app/reducer/filterSlice";
 
 const Movies = () => {
   const dispatch = useDispatch();
   const { sortBy, genre, page } = useSelector((state) => state.filter);
-  const { data, isSuccess, error } = useGetAllMovieQuery({
+
+  const { data, isSuccess } = useGetAllMovieQuery({
     page,
     genre: genre.id,
     sortBy,
@@ -19,11 +19,8 @@ const Movies = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [page]);
+  }, [data?.page, page]);
 
-  useEffect(() => {
-    dispatch(resetePage());
-  }, [sortBy, genre]);
   return (
     <>
       <MoviesFilter />

@@ -8,7 +8,7 @@ const MovieCard = ({ movie }) => {
   return (
     <Link
       to={`/movies/${movie.id}`}
-      className={`flex flex-col rounded-md overflow-hidden bg-grayLighter transition-all hover:scale-105`}
+      className={`flex flex-col h-full rounded-md overflow-hidden bg-grayLighter transition-all hover:scale-105`}
       aria-labelledby="modal-headline"
     >
       <div className="flex h-48 sm:h-56  md:h-60 lg:h-56">
@@ -61,7 +61,7 @@ const MovieCard = ({ movie }) => {
           />
         </div>
 
-        <h1 className="line-clamp-1 text-light font-bold text-sm">
+        <h1 className="text-light font-bold text-sm">
           {movie.title}
         </h1>
       </div>

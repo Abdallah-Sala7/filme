@@ -1,13 +1,19 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, FreeMode } from "swiper";
-import { gridIcon, poster, poster2 } from "../assets";
-import { HeaderCard, LoadingCard, MovieCard, SwiperNav } from "../components";
 import { useGetAllMovieQuery } from "../app/server/movieApi";
-import { useDispatch } from "react-redux";
 import { setGenre, setSortBy } from "../app/reducer/filterSlice";
+import { useGetUpcomingQuery } from "../app/server/movieDetailsApi";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Pagination } from "swiper";
+import { gridIcon } from "../assets";
+import { HeaderCard, LoadingHeader, MySwiper } from "../components";
+import { useGetAllInterestsQuery } from "../app/server/interestsApi";
+import { useEffect } from "react";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { data: popularMovie, isSuccess: popularSuccess } = useGetAllMovieQuery(
     { page: 1, genre: "all", sortBy: "popularity.desc" }
   );
@@ -15,8 +21,8 @@ const Home = () => {
     { page: 1, genre: "all", sortBy: "vote_average.desc" }
   );
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { data: upcomingMovie, isSuccess: upcomingSuccess } =
+    useGetUpcomingQuery();
 
   const handleGenreClick = (e, sort) => {
     e.preventDefault();
@@ -24,6 +30,15 @@ const Home = () => {
     dispatch(setSortBy(sort));
     navigate("/movies");
   };
+
+  const interestsGenre = localStorage.getItem("interestsGenre");
+
+  const { data: interestsData, isSuccess: interestsSuccess } =
+    useGetAllMovieQuery({
+      page: 1,
+      genre: interestsGenre,
+      sortBy: "vote_average.desc",
+    });
 
   return (
     <>
@@ -39,80 +54,49 @@ const Home = () => {
           pagination={{
             clickable: true,
           }}
+          loop={true}
           modules={[Pagination]}
+          className="header-swiper"
         >
-          <SwiperSlide>
-            <HeaderCard poster={poster} title={"The Final Season"} rate={9.2} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <HeaderCard poster={poster2} title={"Breaking bad"} rate={8.5} />
-          </SwiperSlide>
+          {upcomingSuccess ? (
+            upcomingMovie?.results.slice(0, 3).map((movie) => (
+              <SwiperSlide key={movie.id}>
+                <HeaderCard movie={movie} />
+              </SwiperSlide>
+            ))
+          ) : (
+            <>
+              <SwiperSlide>
+                <LoadingHeader />
+              </SwiperSlide>
+              <SwiperSlide>
+                <LoadingHeader />
+              </SwiperSlide>
+            </>
+          )}
         </Swiper>
       </header>
 
-      {/* <section className="mb-5">
-        <a href="#" className="flex justify-between items-center">
-          <h1 className="text-yellow font-semibold text-xl capitalize">
-            for you
-          </h1>
+      {interestsGenre && (
+        <section className="mb-5">
+          <a href="#" className="flex justify-between items-center">
+            <h1 className="text-yellow font-semibold text-xl capitalize">
+              for you
+            </h1>
 
-          <img
-            src={gridIcon}
-            alt=""
-            className="w-4 h-4 object-contain yellow-filter"
+            <img
+              src={gridIcon}
+              alt=""
+              className="w-4 h-4 object-contain yellow-filter"
+            />
+          </a>
+
+          <MySwiper
+            data={interestsData?.results}
+            isLoading={interestsSuccess}
           />
-        </a>
-
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={2.2}
-          breakpoints={{
-            576: {
-              slidesPerView: 3.4,
-            },
-            768: {
-              slidesPerView: 4.5,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 5.5,
-            },
-            1200: {
-              slidesPerView: 6.5,
-            },
-          }}
-          modules={[Autoplay, Pagination]}
-          className="!py-5"
-        >
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <MovieCard />
-          </SwiperSlide>
-        </Swiper>
-      </section> */}
+        </section>
+      )}
 
       <section className="mb-5">
         <a
@@ -133,68 +117,7 @@ const Home = () => {
           />
         </a>
 
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={2.5}
-          freeMode={true}
-          updateOnWindowResize={true}
-          breakpoints={{
-            576: {
-              slidesPerView: 3.2,
-            },
-            768: {
-              slidesPerView: 4.25,
-              spaceBetween: 15,
-            },
-            1024: {
-              slidesPerView: 5.25,
-            },
-            1200: {
-              slidesPerView: 6.25,
-            },
-          }}
-          modules={[Pagination, FreeMode]}
-          className="!py-5"
-        >
-          {!topRateSuccess ? (
-            <>
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-            </>
-          ) : (
-            topRateMovie.results.map((item, index) => (
-              <SwiperSlide key={index}>
-                <MovieCard movie={item} />
-              </SwiperSlide>
-            ))
-          )}
-          <SwiperNav />
-        </Swiper>
+        <MySwiper data={topRateMovie?.results} isLoading={topRateSuccess} />
       </section>
 
       <section className="mb-5">
@@ -216,67 +139,7 @@ const Home = () => {
           />
         </a>
 
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={2.5}
-          freeMode={true}
-          breakpoints={{
-            576: {
-              slidesPerView: 3.2,
-            },
-            768: {
-              slidesPerView: 4.25,
-              spaceBetween: 15,
-            },
-            1024: {
-              slidesPerView: 5.25,
-            },
-            1200: {
-              slidesPerView: 6.25,
-            },
-          }}
-          modules={[Autoplay, Pagination, FreeMode]}
-          className="!py-5"
-        >
-          {!popularSuccess ? (
-            <>
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <LoadingCard />
-              </SwiperSlide>
-            </>
-          ) : (
-            popularMovie.results.map((item, index) => (
-              <SwiperSlide key={index}>
-                <MovieCard movie={item} />
-              </SwiperSlide>
-            ))
-          )}
-          <SwiperNav />
-        </Swiper>
+        <MySwiper data={popularMovie?.results} isLoading={popularSuccess} />
       </section>
     </>
   );

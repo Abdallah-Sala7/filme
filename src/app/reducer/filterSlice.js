@@ -29,6 +29,7 @@ export const filterSlice = createSlice({
         state.page -= 1;
       }
     },
+    
     resetePage: (state) => {
       state.page = 1;
     },

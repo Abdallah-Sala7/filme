@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const api_key = "0561cf548ca91eafbf170ffa2911a740";
-const listId = 8252780;
 
 const baseUrl = ` https://api.themoviedb.org/3`;
 
@@ -19,10 +18,16 @@ export const movieDetailsApi = createApi({
     getMovieDetails: builder.query({
       query: (id) => `movie/${id}?api_key=${api_key}&language=en-US&append_to_response=videos,images,credits,reviews`,
       providesTags: ["MovieDetails"],
+    }),
+
+    getUpcoming: builder.query({
+      query: () => `movie/upcoming?api_key=${api_key}&language=en-US&page=1`,
+      providesTags: ["MovieDetails"],
     })
   }),
 });
 
 export const {
-  useGetMovieDetailsQuery
+  useGetMovieDetailsQuery,
+  useGetUpcomingQuery
 } = movieDetailsApi;

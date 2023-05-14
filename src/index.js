@@ -8,22 +8,23 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import RootLayout from "./pages/RootLayout";
-import Home from "./pages/Home";
-import Movies from "./pages/Movies";
-import MoviePage from "./pages/MoviePage";
-import AuthLayout from "./pages/AuthLayout";
-import { Login, Register, WithGaurd } from "./components";
-import Interests from "./pages/Interests";
 
+import {
+  RootLayout,
+  AuthLayout,
+  Home,
+  Movies,
+  MoviePage,
+  Interests,
+  Login,
+  Register,
+} from "./pages";
+
+import { ScrollToTop } from "./components";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <WithGaurd>
-        <RootLayout />
-      </WithGaurd>
-    ),
+    element: <RootLayout />,
     children: [
       { path: "/", element: <Home /> },
       {
@@ -43,21 +44,16 @@ const router = createBrowserRouter([
       { index: true, element: <Login /> },
       { path: "/auth/login", element: <Login /> },
       { path: "/auth/register", element: <Register /> },
+      { path: "/auth/interests", element: <Interests /> },
     ],
-  },
-  {
-    path: "interests",
-    element: (
-      <WithGaurd>
-        <Interests />
-      </WithGaurd>
-    ),
   },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <RouterProvider router={router}>
+      <ScrollToTop />
+    </RouterProvider>
   </Provider>
 );

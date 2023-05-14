@@ -1,5 +1,5 @@
 import React from "react";
-import { authBg, logo, poster } from "../assets";
+import { authBg, logo } from "../assets";
 import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
