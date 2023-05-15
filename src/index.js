@@ -19,8 +19,8 @@ import {
   Login,
   Register,
 } from "./pages";
+import Search from "./pages/Search";
 
-import { ScrollToTop } from "./components";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/movies/:movieId",
         element: <MoviePage />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
       },
     ],
   },
@@ -52,8 +56,6 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router}>
-      <ScrollToTop />
-    </RouterProvider>
+    <RouterProvider router={router} />
   </Provider>
 );

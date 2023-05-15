@@ -23,7 +23,7 @@ const CastSwiper = ({ data }) => {
           slidesPerView: 7.25,
         },
         992: {
-          slidesPerView: 8.25,
+          slidesPerView: 9.5,
         },
       },
       injectStyles: [

@@ -38,6 +38,11 @@ body{
   background-color: #000010;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 .header-swiper .swiper-pagination{
   width: auto !important;
   left: 30px !important;

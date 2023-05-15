@@ -4,14 +4,14 @@ import LoadingCard from "./loading_components/LoadingCard";
 import MovieCard from "./MovieCard";
 register();
 
-const MySwiper = ({ isLoading, data }) => {
+const MySwiper = ({ isLoading, data, forYouIds }) => {
   const swiperRef = useRef(null);
 
   useEffect(() => {
     const swiperContainer = swiperRef.current;
     const params = {
       navigation: true,
-      pagination: true,
+      pagination: false,
       slidesPerView: 2.5,
       spaceBetween: 10,
       freeMode: true,
@@ -75,52 +75,54 @@ const MySwiper = ({ isLoading, data }) => {
     Object.assign(swiperContainer, params);
     swiperContainer.initialize();
   }, []);
-  useEffect(() => {
-    const swiperContainer = swiperRef.current;
-    const params = {
-      navigation: true,
-      pagination: false,
-    };
-
-    Object.assign(swiperContainer, params);
-    swiperContainer.initialize();
-  }, []);
 
   return (
     <swiper-container ref={swiperRef} init="false">
-      {!isLoading ? (
+      {forYouIds ? (
         <>
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>{" "}
-          <swiper-slide class="blue-slide">
-            <LoadingCard />
-          </swiper-slide>
+          {forYouIds?.data.map((item, idx) => (
+            <swiper-slide key={idx} class="blue-slide">
+              <MovieCard id={item.id} />
+            </swiper-slide>
+          ))}
         </>
       ) : (
-        data?.map((item, idx) => (
-          <swiper-slide key={idx} class="blue-slide">
-            <MovieCard movie={item} />
-          </swiper-slide>
-        ))
+        <>
+          {!isLoading ? (
+            <>
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>{" "}
+              <swiper-slide class="blue-slide">
+                <LoadingCard />
+              </swiper-slide>
+            </>
+          ) : (
+            data?.map((item, idx) => (
+              <swiper-slide key={idx} class="blue-slide">
+                <MovieCard movie={item} />
+              </swiper-slide>
+            ))
+          )}
+        </>
       )}
     </swiper-container>
   );

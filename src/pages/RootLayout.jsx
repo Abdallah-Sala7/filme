@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenAside } from "../app/reducer/appSlice";
 import { Outlet } from "react-router-dom";
-import { Navbar, Aside } from "../components";
+import { Navbar, Aside, ScrollToTop } from "../components";
 
 const RootLayout = () => {
   const dispatch = useDispatch();
@@ -17,6 +17,9 @@ const RootLayout = () => {
   }, [openAside]);
 
   return (
+    <>
+    <ScrollToTop />
+
     <div className="flex bg-dark">
       <Aside />
 
@@ -34,10 +37,11 @@ const RootLayout = () => {
         } lg:hidden`}
         aria-labelledby="slide-over-title"
         onClick={() => {
-          dispatch(setOpenAside());
+          dispatch(setOpenAside(false));
         }}
       ></div>
     </div>
+    </>
   );
 };
 

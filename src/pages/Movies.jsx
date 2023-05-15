@@ -2,10 +2,7 @@ import { useEffect } from "react";
 import { LoadingCard, MovieCard, MoviesFilter } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetAllMovieQuery } from "../app/server/movieApi";
-import {
-  decrementPage,
-  incrementPage
-} from "../app/reducer/filterSlice";
+import { decrementPage, incrementPage } from "../app/reducer/filterSlice";
 
 const Movies = () => {
   const dispatch = useDispatch();
@@ -18,7 +15,7 @@ const Movies = () => {
   });
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [data?.page, page]);
 
   return (
@@ -34,21 +31,17 @@ const Movies = () => {
 
           <div className="flex justify-center items-center gap-3 mb-4">
             <button
-              className="bg-yellow text-black capitalize font-semibold px-5 py-2 rounded-md"
+              className="bg-yellow text-black capitalize font-semibold px-5 py-2 rounded-md disabled:opacity-50"
               onClick={() => dispatch(decrementPage())}
               disabled={page === 1}
             >
               prev
             </button>
 
-            <p className="text-light font-semibold">
-              {data?.page} / {data?.total_pages}
-            </p>
-
             <button
-              className="bg-yellow text-black capitalize font-semibold px-5 py-2 rounded-md"
+              className={`bg-yellow text-black capitalize font-semibold px-5 py-2 rounded-md disabled:opacity-50`}
               onClick={() => dispatch(incrementPage())}
-              disabled={data?.page === data?.total_pages}
+              disabled={data?.results.length < 20}
             >
               next
             </button>
@@ -56,7 +49,6 @@ const Movies = () => {
         </>
       ) : (
         <section className="grid grid-cols-2 gap-4 py-5 sm:grid-cols-4 md:grid-cols-5 md:gap-5 xl:grid-cols-6">
-          <LoadingCard />
           <LoadingCard />
           <LoadingCard />
           <LoadingCard />

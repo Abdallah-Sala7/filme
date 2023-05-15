@@ -18,12 +18,12 @@ const CastCard = ({ cast }) => {
         )}
       </div>
 
-      <h1 className="text-center text-light font-semibold text-sm">
+      <h1 className="text-center text-light font-semibold text-xs">
         {cast.name}
       </h1>
 
-      <h2 className="text-center text-light text-sm leading-none">
-        as {cast.character}
+      <h2 className="text-center text-light text-sm leading-none line-clamp-1">
+        as {cast.character.split("/")[0]}
       </h2>
     </div>
   );

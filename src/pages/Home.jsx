@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Pagination } from "swiper";
 import { gridIcon } from "../assets";
 import { HeaderCard, LoadingHeader, MySwiper } from "../components";
-import { useGetAllInterestsQuery } from "../app/server/interestsApi";
-import { useEffect } from "react";
+import { useGetHomeForYouMoviesQuery } from "../app/server/forYouMoviesApi";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -20,9 +19,12 @@ const Home = () => {
   const { data: topRateMovie, isSuccess: topRateSuccess } = useGetAllMovieQuery(
     { page: 1, genre: "all", sortBy: "vote_average.desc" }
   );
-
   const { data: upcomingMovie, isSuccess: upcomingSuccess } =
     useGetUpcomingQuery();
+
+  const lastMovie = localStorage.getItem("lastMovie");
+
+  const { data: forYouIds, error } = useGetHomeForYouMoviesQuery(lastMovie);
 
   const handleGenreClick = (e, sort) => {
     e.preventDefault();
@@ -91,10 +93,14 @@ const Home = () => {
             />
           </a>
 
-          <MySwiper
-            data={interestsData?.results}
-            isLoading={interestsSuccess}
-          />
+          {forYouIds ? (
+            <MySwiper forYouIds={forYouIds} />
+          ) : (
+            <MySwiper
+              data={interestsData?.results}
+              isLoading={interestsSuccess}
+            />
+          )}
         </section>
       )}
 

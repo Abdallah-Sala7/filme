@@ -5,6 +5,8 @@ export {default as poster} from './imgs/poster.jpg'
 export {default as poster2} from './imgs/poster2.jpg'
 export {default as authBg} from './imgs/background.jpg'
 
+export {default as defaultImg} from './imgs/defimg.jpg'
+
 
 // expotr icons
 export {default as homeIcon} from './icons/home.png'
@@ -32,5 +34,6 @@ export {default as downArrowIcon} from './icons/down-arrow.png'
 export {default as addUserIcon} from './icons/add-user.png'
 export {default as enterIcon} from './icons/enter.png'
 export {default as lockIcon} from './icons/padlock.png'
+export {default as exitIcon} from './icons/exit.png'
 
 

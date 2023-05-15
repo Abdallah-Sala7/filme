@@ -1,6 +1,7 @@
 import React from "react";
 import {
   chatIcon,
+  defaultImg,
   homeIcon,
   logo,
   mailIcon,
@@ -9,10 +10,12 @@ import {
   videoIcon,
 } from "../assets";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Aside = () => {
   const { openAside } = useSelector((state) => state.app);
+
+  const isAuth = localStorage.getItem("isAuth");
 
   return (
     <aside
@@ -21,13 +24,25 @@ const Aside = () => {
       } lg:translate-x-0`}
     >
       <div>
-        <div className="flex border-b border-grayLighter p-4 mb-4">
+        <Link to={"/"} className="flex border-b border-grayLighter p-4">
           <img
             src={logo}
             alt="web film"
             className="w-full h-20 object-contain"
           />
-        </div>
+        </Link>
+
+        {isAuth && (
+          <div className="flex items-center justify-between p-4 mb-4 border-b border-grayLighter">
+            <img
+              src={defaultImg}
+              alt="default img"
+              className="w-20 h-20 object-cover rounded-full"
+            />
+
+            <h1 className="text-white text-2xl capitalize font-semibold">ali</h1>
+          </div>
+        )}
 
         <ul className="mb-auto aside-nav">
           <li>
